@@ -5,5 +5,5 @@
 
 TEST(suite, test)
 {
-
+    ASSERT_EQ(1, 1);
 }

@@ -1,7 +1,15 @@
 #include <iostream>
+#include "src/Delegate.h"
+
+void print(int i)
+{
+    std::cout << i;
+}
 
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+    Delegate<int> del;
+    del.Add(print);
+    del.Invoke(3);
     return 0;
 }

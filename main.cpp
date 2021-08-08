@@ -6,10 +6,21 @@ void print(int i)
     std::cout << i;
 }
 
+class my
+{
+public:
+    void function(int a) const
+    {
+
+    }
+};
+
 int main()
 {
-    Delegate<int> del;
-    del.Add(print);
-    del.Invoke(3);
+    std::function<void(int)> a = nullptr;
+    if (a)
+    {
+        std::cout << "a";
+    }
     return 0;
 }

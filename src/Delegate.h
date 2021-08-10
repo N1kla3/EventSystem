@@ -12,6 +12,8 @@ class MemberFunctionHolderBase
 {
 public:
     virtual void Invoke(Args...) = 0;
+
+    virtual ~MemberFunctionHolderBase() = default;
 };
 
 template<typename Object, typename ...Args>
@@ -22,13 +24,19 @@ class MemberFunctionHolder : public MemberFunctionHolderBase<Args...>
 public:
     void StoreObject(Object* inObj, ObjectFunction& inFunction)
     {
-
+        m_Object = inObj;
+        m_Function = inFunction;
     }
 
     virtual void Invoke(Args... args) override
     {
-        m_Function(m_Object, args...);
+        if (m_Object)
+        {
+            m_Function(m_Object, args...);
+        }
     }
+
+    virtual ~MemberFunctionHolder() = default;
 
 private:
     Object* m_Object = nullptr;
@@ -47,8 +55,10 @@ public:
         typedef typename std::function<void(Object&, Args...)> MemberFunction;
         if (obj)
         {
-            auto member_function = new MemberFunctionHolder<Object, Args...>;
+            auto* member_function = new MemberFunctionHolder<Object, Args...>;
             member_function->StoreObject(obj, inFunction);
+
+            delete m_MemberFunction;
             m_MemberFunction = member_function;
 
         }
@@ -71,11 +81,25 @@ public:
         }
     }
 
+    void RemoveAll()
+    {
+        m_Internal = nullptr;
+        delete m_MemberFunction;
+        m_MemberFunction = nullptr;
+    }
+
+    Delegate() = default;
+
+    virtual ~Delegate()
+    {
+        delete m_MemberFunction;
+    }
+
 protected:
 
 private:
-    Function m_Internal;
-    MemberFunctionHolderBase<Args...>* m_MemberFunction;
+    Function m_Internal = nullptr;
+    MemberFunctionHolderBase<Args...>* m_MemberFunction = nullptr;
 };
 
 // TODO: add a lot of checks and tests

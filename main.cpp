@@ -22,5 +22,10 @@ int main()
     {
         std::cout << "a";
     }
+    Delegate<int, const std::string&> delegate;
+    delegate.Add([](int a, const std::string& b){
+
+    });
+    delegate.Invoke(1, "sdf");
     return 0;
 }

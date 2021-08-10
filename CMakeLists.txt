@@ -12,7 +12,7 @@ set(SOURCE
         Delegate.cpp Delegate.h)
 
 set(TESTS
-        test.cpp
+        DelegateTest.cpp
         )
 
 list(TRANSFORM TESTS PREPEND "tests/")

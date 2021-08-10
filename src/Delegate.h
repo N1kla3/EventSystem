@@ -32,7 +32,7 @@ public:
     {
         if (m_Object)
         {
-            m_Function(m_Object, args...);
+            m_Function(*m_Object, args...);
         }
     }
 

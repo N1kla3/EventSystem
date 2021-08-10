@@ -23,12 +23,33 @@ void Function(int a, const std::string& b, TestFunctions* c)
     success = true;
 }
 
+class TestClass
+{
+public:
+    mutable bool success = false;
+
+    void Function(int a, const std::string& b, TestFunctions* c)
+    {
+        success = true;
+    }
+
+    void FunctionConst(int a, const std::string& b, TestFunctions* c) const
+    {
+        success = true;
+    }
+
+    void FunctionMovable(int a, const std::string& b, TestFunctions* c) &&
+    {
+        success = true;
+    }
+};
+
 TEST(suite, test)
 {
     ASSERT_EQ(1, 1);
 }
 
-TEST(Delegate, one)
+TEST(Delegate, FunctionOne)
 {
     auto* test = new TestFunctions;
     success = false;
@@ -43,4 +64,16 @@ TEST(Delegate, one)
     ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
     ASSERT_TRUE(success);
     delete test;
+}
+
+TEST(Delegate, MemberFunctionOne)
+{
+    auto* test = new TestFunctions;
+    auto* a = new TestClass;
+    Delegate<int, const std::string&, TestFunctions*> delegate;
+    delegate.AddMemberFunction<TestClass>(a, &TestClass::Function);
+    ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
+    delegate.RemoveAll();
+    ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
+    ASSERT_TRUE(a->success);
 }

@@ -9,7 +9,7 @@ add_subdirectory(googletest)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 set(SOURCE
-        Delegate.cpp Delegate.h)
+        Delegate.cpp Delegate.h MultiCastDelegate.cpp MultiCastDelegate.h)
 
 set(TESTS
         DelegateTest.cpp

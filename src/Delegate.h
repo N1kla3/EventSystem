@@ -62,6 +62,10 @@ public:
             m_MemberFunction = member_function;
 
         }
+        else
+        {
+            RemoveAll();
+        }
     }
 
     void Add(const Function& Func)
@@ -101,5 +105,3 @@ private:
     Function m_Internal = nullptr;
     MemberFunctionHolderBase<Args...>* m_MemberFunction = nullptr;
 };
-
-// TODO: add a lot of checks and tests

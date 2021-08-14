@@ -77,3 +77,29 @@ TEST(Delegate, MemberFunctionOne)
     ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
     ASSERT_TRUE(a->success);
 }
+
+TEST(Delegate, MemberFunctionConstOne)
+{
+    auto* test = new TestFunctions;
+    auto* a = new TestClass;
+    Delegate<int, const std::string&, TestFunctions*> delegate;
+    delegate.AddMemberFunction<const TestClass>(a, &TestClass::FunctionConst);
+    ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
+    delegate.RemoveAll();
+    ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
+    ASSERT_TRUE(a->success);
+}
+
+TEST(Delegate, MemberFunctionVolatileOne)
+{
+    auto* test = new TestFunctions;
+    auto* a = new TestClass;
+    Delegate<int, const std::string&, TestFunctions*> delegate;
+    delegate.AddMemberFunction<TestClass>(a, &TestClass::Function);
+    ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
+    delegate.RemoveAll();
+    ASSERT_TRUE(a->success);
+    a = nullptr;
+    delegate.AddMemberFunction<TestClass>(a, &TestClass::Function);
+    ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
+}

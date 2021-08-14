@@ -1,0 +1,14 @@
+//
+// Created by Nicola on 15.08.2021.
+//
+
+#ifndef EVENTSYSTEM_MULTICASTDELEGATE_H
+#define EVENTSYSTEM_MULTICASTDELEGATE_H
+
+
+class MultiCastDelegate
+{
+};
+
+
+#endif//EVENTSYSTEM_MULTICASTDELEGATE_H

@@ -2,7 +2,7 @@
 // Created by nicola on 10/02/2021.
 //
 #include "gtest/gtest.h"
-#include "../src/Delegate.h"
+#include "Delegate.h"
 
 namespace
 {
@@ -43,11 +43,6 @@ public:
         success = true;
     }
 };
-
-TEST(suite, test)
-{
-    ASSERT_EQ(1, 1);
-}
 
 TEST(Delegate, FunctionOne)
 {
@@ -90,7 +85,7 @@ TEST(Delegate, MemberFunctionConstOne)
     ASSERT_TRUE(a->success);
 }
 
-TEST(Delegate, MemberFunctionVolatileOne)
+TEST(Delegate, MemberFunctionCallEmpty)
 {
     auto* test = new TestFunctions;
     auto* a = new TestClass;

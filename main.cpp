@@ -1,5 +1,5 @@
 #include <iostream>
-#include "src/Delegate.h"
+#include "Delegate.h"
 
 void print(int i)
 {

@@ -7,17 +7,19 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(googletest)
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 set(SOURCE
-        Delegate.cpp Delegate.h MultiCastDelegate.cpp MultiCastDelegate.h)
+        Delegate.cpp Delegate.h MultiCastDelegate.cpp MultiCastDelegate.h DelegateHandle.cpp DelegateHandle.h)
 
 set(TESTS
         DelegateTest.cpp
-        )
+        MulticastDelegateTest.cpp)
 
 list(TRANSFORM TESTS PREPEND "tests/")
 list(TRANSFORM SOURCE PREPEND "src/")
 
+enable_testing()
 
 add_executable(${PROJECT_NAME} ${SOURCE} main.cpp)
 add_executable(tests ${SOURCE} ${TESTS})

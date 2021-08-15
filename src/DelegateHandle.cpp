@@ -16,7 +16,7 @@ DelegateHandle::DelegateHandle()
     m_Id = GenerateID(this);
 }
 
-uint16_t DelegateHandle::GenerateID(DelegateHandle* inHandle)
+uint32_t DelegateHandle::GenerateID(DelegateHandle* inHandle)
 {
     return reinterpret_cast<uint32_t>(inHandle);
 }

@@ -58,9 +58,7 @@ public:
             auto* member_function = new MemberFunctionHolder<Object, Args...>;
             member_function->StoreObject(obj, inFunction);
 
-            delete m_MemberFunction;
-            m_MemberFunction = member_function;
-
+            m_MemberFunction.reset(member_function);
         }
         else
         {
@@ -88,20 +86,22 @@ public:
     void RemoveAll()
     {
         m_Internal = nullptr;
-        delete m_MemberFunction;
+        m_MemberFunction.release();
         m_MemberFunction = nullptr;
     }
 
     Delegate() = default;
+    Delegate(Delegate&& delegate) noexcept = default;
+    Delegate(const Delegate& delegate) = default;
+    Delegate& operator=(const Delegate& rhs) = default;
 
     virtual ~Delegate()
     {
-        delete m_MemberFunction;
     }
 
 protected:
 
 private:
     Function m_Internal = nullptr;
-    MemberFunctionHolderBase<Args...>* m_MemberFunction = nullptr;
+    std::unique_ptr<MemberFunctionHolderBase<Args...>> m_MemberFunction = nullptr;
 };

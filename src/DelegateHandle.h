@@ -25,7 +25,7 @@ private:
 
     uint32_t m_Id;
 
-    static uint16_t GenerateID(DelegateHandle* inHandle);
+    static uint32_t GenerateID(DelegateHandle* inHandle);
 
     template<typename ...Args>
     friend class MultiCastDelegate;

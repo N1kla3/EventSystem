@@ -17,16 +17,15 @@ public:
         Delegate<Args...> delegate;
         delegate.AddMemberFunction(obj, inFunction);
         DelegateHandle handle;
-        m_Delegates.insert(std::move(delegate));
+        m_Delegates.insert(std::pair<DelegateHandle, Delegate<Args...>>(handle, delegate));
         return handle;
     }
 
     DelegateHandle AddFunction(std::function<void(Args...)> inFunction)
     {
-        Delegate<Args...> delegate;
-        delegate.Add(inFunction);
         DelegateHandle handle;
-        m_Delegates[handle] = delegate;
+        m_Delegates.insert(std::pair<DelegateHandle, Delegate<Args...>>(handle, Delegate<Args...>()));
+        m_Delegates[handle].Add(inFunction);
         return handle;
     }
 
@@ -45,12 +44,12 @@ public:
 
     void Broadcast(Args ...args) const
     {
-        for (auto [none, delegate] : m_Delegates)
+        for (auto& delegate : m_Delegates)
         {
-            delegate.Invoke(args...);
+            delegate.second.Invoke(args...);
         }
     }
 
 private:
-    std::unordered_map<DelegateHandle, Delegate<Args...>> m_Delegates;
+    std::map<DelegateHandle, Delegate<Args...>> m_Delegates;
 };

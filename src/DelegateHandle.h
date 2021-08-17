@@ -12,6 +12,7 @@ class DelegateHandle
 {
 public:
 
+    DelegateHandle(const DelegateHandle& handle) = default;
     DelegateHandle& operator=(const DelegateHandle& rhs) = default;
     bool operator==(const DelegateHandle& rhs) const;
     bool operator!=(const DelegateHandle& rhs) const;

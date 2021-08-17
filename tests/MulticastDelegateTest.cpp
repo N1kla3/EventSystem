@@ -9,7 +9,7 @@ namespace
     bool success = false;
 }
 
-class TestFunctions
+class TestFunctionss
 {
 public:
     void function(int a)
@@ -18,27 +18,27 @@ public:
     }
 };
 
-void Function(int a, const std::string& b, TestFunctions* c)
+void Functionn(int a, const std::string& b, TestFunctionss* c)
 {
     success = true;
 }
 
-class TestClass
+class TestClasss
 {
 public:
     mutable bool success = false;
 
-    void Function(int a, const std::string& b, TestFunctions* c)
+    void Function(int a, const std::string& b, TestFunctionss* c)
     {
         success = true;
     }
 
-    void FunctionConst(int a, const std::string& b, TestFunctions* c) const
+    void FunctionConst(int a, const std::string& b, TestFunctionss* c) const
     {
         success = true;
     }
 
-    void FunctionMovable(int a, const std::string& b, TestFunctions* c) &&
+    void FunctionMovable(int a, const std::string& b, TestFunctionss* c) &&
     {
         success = true;
     }
@@ -46,6 +46,7 @@ public:
 
 TEST(Multicast, AddDelegateTest)
 {
-    MultiCastDelegate<int, const std::string&, TestFunctions*> delegate;
-    delegate.AddFunction(Function);
+    MultiCastDelegate<int, const std::string&, TestFunctionss*> delegate;
+    delegate.AddFunction(Functionn);
+    ASSERT_NO_THROW(delegate.Broadcast(2, "dd", new TestFunctionss));
 }

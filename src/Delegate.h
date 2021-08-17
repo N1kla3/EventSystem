@@ -71,7 +71,7 @@ public:
         m_Internal = Func;
     }
 
-    void Invoke(Args... args)
+    void Invoke(Args... args) const
     {
         if (m_Internal)
         {
@@ -87,21 +87,18 @@ public:
     {
         m_Internal = nullptr;
         m_MemberFunction.release();
-        m_MemberFunction = nullptr;
     }
 
     Delegate() = default;
     Delegate(Delegate&& delegate) noexcept = default;
     Delegate(const Delegate& delegate) = default;
-    Delegate& operator=(const Delegate& rhs) = default;
 
     virtual ~Delegate()
-    {
-    }
+    = default;
 
 protected:
 
 private:
     Function m_Internal = nullptr;
-    std::unique_ptr<MemberFunctionHolderBase<Args...>> m_MemberFunction = nullptr;
+    std::unique_ptr<MemberFunctionHolderBase<Args...>> m_MemberFunction;
 };

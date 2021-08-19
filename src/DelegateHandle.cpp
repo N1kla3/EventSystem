@@ -13,10 +13,10 @@ bool DelegateHandle::operator>=(const DelegateHandle& rhs) const { return !(*thi
 
 DelegateHandle::DelegateHandle()
 {
-    m_Id = GenerateID(this);
+    m_Id = GenerateID();
 }
 
-uint32_t DelegateHandle::GenerateID(DelegateHandle* inHandle)
+uint64_t DelegateHandle::GenerateID()
 {
-    return reinterpret_cast<uint32_t>(inHandle);
+    return STATIC_ID++;
 }

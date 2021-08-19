@@ -7,6 +7,8 @@
 namespace
 {
     bool success = false;
+
+    int count = 0;
 }
 
 class TestFunctionss
@@ -14,13 +16,13 @@ class TestFunctionss
 public:
     void function(int a)
     {
-        success = true;
+        count++;
     }
 };
 
 void Functionn(int a, const std::string& b, TestFunctionss* c)
 {
-    success = true;
+    count++;
 }
 
 class TestClasss
@@ -30,23 +32,62 @@ public:
 
     void Function(int a, const std::string& b, TestFunctionss* c)
     {
-        success = true;
+        count++;
     }
 
     void FunctionConst(int a, const std::string& b, TestFunctionss* c) const
     {
-        success = true;
+        count++;
     }
 
     void FunctionMovable(int a, const std::string& b, TestFunctionss* c) &&
     {
-        success = true;
+        count++;
     }
 };
 
 TEST(Multicast, AddDelegateTest)
 {
+    auto* a = new TestClasss;
     MultiCastDelegate<int, const std::string&, TestFunctionss*> delegate;
     delegate.AddFunction(Functionn);
+    delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
+    delegate.AddFunction(Functionn);
+    delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
     ASSERT_NO_THROW(delegate.Broadcast(2, "dd", new TestFunctionss));
+    ASSERT_EQ(count, 4);
+    count = 0;
 }
+
+TEST(Multicast, RemoveAll)
+{
+    auto* a = new TestClasss;
+    MultiCastDelegate<int, const std::string&, TestFunctionss*> delegate;
+    delegate.AddFunction(Functionn);
+    delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
+    delegate.AddFunction(Functionn);
+    delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
+
+    ASSERT_NO_THROW(delegate.Broadcast(2, "dd", new TestFunctionss));
+    delegate.RemoveAll();
+    ::count = 0;
+    ASSERT_NO_THROW(delegate.Broadcast(2, "dd", new TestFunctionss));
+    ASSERT_EQ(::count, 0);
+    count = 0;
+}
+
+TEST(Multicast, RemoveOne)
+{
+    auto* a = new TestClasss;
+    MultiCastDelegate<int, const std::string&, TestFunctionss*> delegate;
+    delegate.AddFunction(Functionn);
+    DelegateHandle handle = delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
+    delegate.AddFunction(Functionn);
+    delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
+    ASSERT_TRUE(delegate.RemoveFunction(handle));
+
+    ASSERT_NO_THROW(delegate.Broadcast(2, "dd", new TestFunctionss));
+    ASSERT_EQ(::count, 3);
+}
+
+// TODO: use google mock

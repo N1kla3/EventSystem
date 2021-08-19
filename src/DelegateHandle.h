@@ -13,6 +13,7 @@ class DelegateHandle
 public:
 
     DelegateHandle(const DelegateHandle& handle) = default;
+    DelegateHandle(DelegateHandle&& handle) = default;
     DelegateHandle& operator=(const DelegateHandle& rhs) = default;
     bool operator==(const DelegateHandle& rhs) const;
     bool operator!=(const DelegateHandle& rhs) const;
@@ -21,12 +22,21 @@ public:
     bool operator<=(const DelegateHandle& rhs) const;
     bool operator>=(const DelegateHandle& rhs) const;
 
+    [[nodiscard]] bool IsValid() const
+    {
+       return m_Valid;
+    }
+
 private:
     DelegateHandle();
 
-    uint32_t m_Id;
+    uint64_t m_Id = 0;
 
-    static uint32_t GenerateID(DelegateHandle* inHandle);
+    bool m_Valid = false;
+
+    inline static uint64_t STATIC_ID = 0;
+
+    static uint64_t GenerateID();
 
     template<typename ...Args>
     friend class MultiCastDelegate;

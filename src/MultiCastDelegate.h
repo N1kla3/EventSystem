@@ -14,18 +14,25 @@ public:
     template<typename Object>
     DelegateHandle AddMemberFunction(Object* obj, std::function<void(Object&, Args...)> inFunction)
     {
-        Delegate<Args...> delegate;
-        delegate.AddMemberFunction(obj, inFunction);
         DelegateHandle handle;
-        m_Delegates.insert(std::pair<DelegateHandle, Delegate<Args...>>(handle, delegate));
+        if (obj && inFunction)
+        {
+            m_Delegates.insert(std::pair<DelegateHandle, Delegate<Args...>>(handle, Delegate<Args...>()));
+            m_Delegates[handle].AddMemberFunction(obj, inFunction);
+            handle.m_Valid = true;
+        }
         return handle;
     }
 
     DelegateHandle AddFunction(std::function<void(Args...)> inFunction)
     {
         DelegateHandle handle;
-        m_Delegates.insert(std::pair<DelegateHandle, Delegate<Args...>>(handle, Delegate<Args...>()));
-        m_Delegates[handle].Add(inFunction);
+        if (inFunction)
+        {
+            m_Delegates.insert(std::pair<DelegateHandle, Delegate<Args...>>(handle, Delegate<Args...>()));
+            m_Delegates[handle].Add(inFunction);
+            handle.m_Valid = true;
+        }
         return handle;
     }
 
@@ -33,11 +40,14 @@ public:
 
     bool RemoveFunction(const DelegateHandle& inHandle)
     {
-        auto it = m_Delegates.find(inHandle);
-        if (it != m_Delegates.end())
+        if (inHandle.IsValid())
         {
-            m_Delegates.erase(it);
-            return true;
+            auto it = m_Delegates.find(inHandle);
+            if (it != m_Delegates.end())
+            {
+                m_Delegates.erase(it);
+                return true;
+            }
         }
         return false;
     }
@@ -50,6 +60,11 @@ public:
         }
     }
 
+    MultiCastDelegate() = default;
+    MultiCastDelegate(const MultiCastDelegate& delegate) = delete;
+    MultiCastDelegate(MultiCastDelegate&& delegate) noexcept = default;
+
 private:
     std::map<DelegateHandle, Delegate<Args...>> m_Delegates;
 };
+// TODO: make with shared pointers

@@ -24,8 +24,11 @@ class MemberFunctionHolder : public MemberFunctionHolderBase<Args...>
 public:
     void StoreObject(Object* inObj, ObjectFunction& inFunction)
     {
-        m_Object = inObj;
-        m_Function = inFunction;
+        if (inObj && inFunction)
+        {
+            m_Object = inObj;
+            m_Function = inFunction;
+        }
     }
 
     virtual void Invoke(Args... args) override
@@ -91,7 +94,7 @@ public:
 
     Delegate() = default;
     Delegate(Delegate&& delegate) noexcept = default;
-    Delegate(const Delegate& delegate) = default;
+    Delegate(const Delegate& delegate) = delete;
 
     virtual ~Delegate()
     = default;

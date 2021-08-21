@@ -48,7 +48,7 @@ public:
 
 TEST(Multicast, AddDelegateTest)
 {
-    auto* a = new TestClasss;
+    auto a = std::make_shared<TestClasss>();
     MultiCastDelegate<int, const std::string&, TestFunctionss*> delegate;
     delegate.AddFunction(Functionn);
     delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
@@ -61,7 +61,7 @@ TEST(Multicast, AddDelegateTest)
 
 TEST(Multicast, RemoveAll)
 {
-    auto* a = new TestClasss;
+    auto a = std::make_shared<TestClasss>();
     MultiCastDelegate<int, const std::string&, TestFunctionss*> delegate;
     delegate.AddFunction(Functionn);
     delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
@@ -78,7 +78,7 @@ TEST(Multicast, RemoveAll)
 
 TEST(Multicast, RemoveOne)
 {
-    auto* a = new TestClasss;
+    auto a = std::make_shared<TestClasss>();
     MultiCastDelegate<int, const std::string&, TestFunctionss*> delegate;
     delegate.AddFunction(Functionn);
     DelegateHandle handle = delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);

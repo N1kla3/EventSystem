@@ -22,7 +22,7 @@ class MemberFunctionHolder : public MemberFunctionHolderBase<Args...>
     typedef typename std::function<void(Object&, Args...)> ObjectFunction;
 
 public:
-    void StoreObject(Object* inObj, ObjectFunction& inFunction)
+    void StoreObject(const std::shared_ptr<Object>& inObj, ObjectFunction& inFunction)
     {
         if (inObj && inFunction)
         {
@@ -33,16 +33,16 @@ public:
 
     virtual void Invoke(Args... args) override
     {
-        if (m_Object)
+        if (!m_Object.expired())
         {
-            m_Function(*m_Object, args...);
+            m_Function(*m_Object.lock(), args...);
         }
     }
 
     virtual ~MemberFunctionHolder() = default;
 
 private:
-    Object* m_Object = nullptr;
+    std::weak_ptr<Object> m_Object;
     ObjectFunction m_Function;
 };
 
@@ -53,7 +53,7 @@ class Delegate
 
 public:
     template<typename Object>
-    void AddMemberFunction(Object* obj, std::function<void(Object&, Args...)> inFunction)
+    void AddMemberFunction(const std::shared_ptr<Object>& obj, std::function<void(Object&, Args...)> inFunction)
     {
         typedef typename std::function<void(Object&, Args...)> MemberFunction;
         if (obj)

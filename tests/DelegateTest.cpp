@@ -64,7 +64,7 @@ TEST(Delegate, FunctionOne)
 TEST(Delegate, MemberFunctionOne)
 {
     auto* test = new TestFunctions;
-    auto* a = new TestClass;
+    auto a = std::make_shared<TestClass>();
     Delegate<int, const std::string&, TestFunctions*> delegate;
     delegate.AddMemberFunction<TestClass>(a, &TestClass::Function);
     ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
@@ -76,7 +76,7 @@ TEST(Delegate, MemberFunctionOne)
 TEST(Delegate, MemberFunctionConstOne)
 {
     auto* test = new TestFunctions;
-    auto* a = new TestClass;
+    auto a = std::make_shared<TestClass>();
     Delegate<int, const std::string&, TestFunctions*> delegate;
     delegate.AddMemberFunction<const TestClass>(a, &TestClass::FunctionConst);
     ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
@@ -88,7 +88,7 @@ TEST(Delegate, MemberFunctionConstOne)
 TEST(Delegate, MemberFunctionCallEmpty)
 {
     auto* test = new TestFunctions;
-    auto* a = new TestClass;
+    auto a = std::make_shared<TestClass>();
     Delegate<int, const std::string&, TestFunctions*> delegate;
     delegate.AddMemberFunction<TestClass>(a, &TestClass::Function);
     ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));

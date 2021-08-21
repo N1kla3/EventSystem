@@ -12,7 +12,7 @@ class MultiCastDelegate
 {
 public:
     template<typename Object>
-    DelegateHandle AddMemberFunction(Object* obj, std::function<void(Object&, Args...)> inFunction)
+    DelegateHandle AddMemberFunction(const std::shared_ptr<Object>& obj, std::function<void(Object&, Args...)> inFunction)
     {
         DelegateHandle handle;
         if (obj && inFunction)

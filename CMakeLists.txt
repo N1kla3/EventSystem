@@ -21,8 +21,8 @@ list(TRANSFORM SOURCE PREPEND "src/")
 
 enable_testing()
 
-add_executable(${PROJECT_NAME} ${SOURCE} main.cpp)
-add_executable(tests ${SOURCE} ${TESTS})
+add_library(${PROJECT_NAME} ${SOURCE})
+add_executable(tests ${TESTS})
 add_test(NAME first COMMAND tests)
 
-target_link_libraries(tests gtest gtest_main)
+target_link_libraries(tests gtest gtest_main ${PROJECT_NAME})

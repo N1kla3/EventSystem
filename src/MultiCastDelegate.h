@@ -67,4 +67,3 @@ public:
 private:
     std::map<DelegateHandle, Delegate<Args...>> m_Delegates;
 };
-// TODO: make with shared pointers

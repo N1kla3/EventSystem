@@ -98,3 +98,20 @@ TEST(Delegate, MemberFunctionCallEmpty)
     delegate.AddMemberFunction<TestClass>(a, &TestClass::Function);
     ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
 }
+
+TEST(Delegate, moveConstructible)
+{
+    auto* test = new TestFunctions;
+    auto a = std::make_shared<TestClass>();
+    Delegate<int, const std::string&, TestFunctions*> delegate;
+    delegate.AddMemberFunction<TestClass>(a, &TestClass::Function);
+    ASSERT_NO_THROW(delegate.Invoke(1, "sdf", test));
+    delegate.RemoveAll();
+    ASSERT_TRUE(a->success);
+    a = nullptr;
+    delegate.AddMemberFunction<TestClass>(a, &TestClass::Function);
+    Delegate<int, const std::string&, TestFunctions*> _delegate(std::move(delegate));
+    ASSERT_NO_THROW(_delegate.Invoke(1, "sdf", test));
+}
+
+// Make normal tests

@@ -88,6 +88,22 @@ TEST(Multicast, RemoveOne)
 
     ASSERT_NO_THROW(delegate.Broadcast(2, "dd", new TestFunctionss));
     ASSERT_EQ(::count, 3);
+    count = 0;
 }
 
-// TODO: use google mock
+TEST(Multicast, moveConstructible)
+{
+    auto a = std::make_shared<TestClasss>();
+    MultiCastDelegate<int, const std::string&, TestFunctionss*> delegate;
+    delegate.AddFunction(Functionn);
+    DelegateHandle handle = delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
+    delegate.AddFunction(Functionn);
+    delegate.AddMemberFunction<TestClasss>(a, &TestClasss::Function);
+    ASSERT_TRUE(delegate.RemoveFunction(handle));
+
+    MultiCastDelegate<int, const std::string&, TestFunctionss*> _delegate(std::move(delegate));
+
+    ASSERT_NO_THROW(_delegate.Broadcast(2, "dd", new TestFunctionss));
+    ASSERT_EQ(::count, 3);
+    count = 0;
+}
